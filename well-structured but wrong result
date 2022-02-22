@@ -1,0 +1,191 @@
+        boolean isNum = scanner.hasNextInt();
+            if (!isNum) {//not number
+                while (!isNum) {//needs work,this only can solve the wrong caused by not number first!
+                    System.out.println("You should enter numbers!");
+                    scanner = new Scanner(System.in);//reinput
+                    isNum = scanner.hasNextInt();
+                    if (!isNum) {//judge again
+                        continue;
+                    } else {//input below here must be number, left 3 occasion
+                        rowCoordinate = scanner.nextInt();
+                        columnCoordinate = scanner.nextInt();
+                        //is number go next judgement
+                        boolean isOverRange = rowCoordinate < 1 || rowCoordinate > 3 || columnCoordinate < 1 || columnCoordinate > 3;
+                        int tempRow = 0;
+                        int tempColumn = 0;
+                        boolean stopped = false;
+                        while (isOverRange && !stopped) {// judge if it is over range,yes go into the loop
+                            System.out.println("coordinates should be from 1 to 3!");
+                            scanner = new Scanner(System.in); //reinput
+                            isNum = scanner.hasNextInt();
+                            if (!isNum) {//judge if it is number again,not number go to the most outer while-loop
+                                break; //go to the most outer while-loop
+                            } else { //
+                                tempRow = scanner.nextInt();
+                                tempColumn = scanner.nextInt();
+                                isOverRange = tempRow < 1 || tempRow > 3 || tempColumn < 1 || tempColumn > 3;//reassign the value of isOverRange
+                                if (isOverRange) {//if it is over range ,go to the next while-loop whose expression is isOverRange
+                                    continue;
+                                } else {//left 2 occasions
+                                    rowCoordinate = tempRow;
+                                    columnCoordinate = tempColumn;
+                                    boolean isOccupied = chessBoard[rowCoordinate - 1][columnCoordinate - 1].equals(superman)
+                                            || chessBoard[rowCoordinate - 1][columnCoordinate - 1].equals(batman);
+                                    int occupiedRow = 0;
+                                    int occupiedColumn = 0;
+                                    while (isOccupied) {//judge the position whether it is occupied,if yes go into this loop
+                                        System.out.println("This cell is occupied! Choose another one!");
+                                        scanner = new Scanner(System.in);//reinput
+                                        isNum = scanner.hasNextInt();
+                                        if (!isNum) {
+                                            stopped = true;
+                                            break;//go to the most outer loop
+                                        } else {
+                                            tempRow = scanner.nextInt();
+                                            tempColumn = scanner.nextInt();
+                                            isOverRange = tempRow < 1 || tempRow > 3 || tempColumn < 1 || tempColumn > 3;
+                                            if (isOverRange) {
+                                                break; //go to the middle while-loop whose expression is isOverRange
+                                            } else { //it is a correct input
+                                                occupiedRow = tempRow;
+                                                occupiedColumn = tempColumn;
+                                                isOccupied = chessBoard[occupiedRow - 1][occupiedColumn - 1].equals(superman)
+                                                        || chessBoard[occupiedRow - 1][occupiedColumn - 1].equals(batman);
+                                                rowCoordinate = occupiedRow;
+                                                columnCoordinate = occupiedColumn;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {//it must be number for now
+                rowCoordinate = scanner.nextInt();
+                columnCoordinate = scanner.nextInt();
+                boolean isOverRange = rowCoordinate < 1 || rowCoordinate > 3 || columnCoordinate < 1 || columnCoordinate > 3;
+                /*boolean isOccupied = chessBoard[rowCoordinate - 1][columnCoordinate - 1].equals(superman)
+                        || chessBoard[rowCoordinate - 1][columnCoordinate - 1].equals(batman);*/
+                boolean isOccupied = false;
+                //boolean outerStopped = false;
+                if (isOverRange) {//if it is over range,go into this loop
+                    while (isOverRange) { //from now on, only problem is it is over range. and tail should connect here
+                        boolean stopped = false;//control the most outer nested loop
+                        System.out.println("coordinates should be from 1 to 3!");
+                        scanner = new Scanner(System.in);//reinput
+                        isNum = scanner.hasNextInt();
+                        if (!isNum) {
+                            while (!isNum && !stopped) {//not number
+                                System.out.println("You should enter numbers!");
+                                scanner = new Scanner(System.in);
+                                isNum = scanner.hasNextInt();
+                                if (!isNum) {
+                                    continue;//reloop
+                                } else {//either...or...
+                                    int tempRow = scanner.nextInt();
+                                    int tempColumn = scanner.nextInt();
+                                    isOverRange = tempRow < 1 || tempRow > 3 || tempColumn < 1 || tempColumn > 3;
+                                    if (!isOverRange) {
+                                        isOccupied = chessBoard[tempRow - 1][tempColumn - 1].equals(superman)
+                                                || chessBoard[tempRow - 1][tempColumn - 1].equals(batman);
+                                        if (!isOccupied) {
+                                            rowCoordinate = tempRow;
+                                            columnCoordinate = tempColumn;
+                                        } else {//must be occupied
+                                            while (isOccupied) {
+                                                System.out.println("This cell is occupied! Choose another one!");
+                                                scanner = new Scanner(System.in);
+                                                isNum = scanner.hasNextInt();
+                                                if (!isNum) {
+                                                    break;
+                                                } else {//must be number
+                                                    tempRow = scanner.nextInt();
+                                                    tempColumn = scanner.nextInt();
+                                                    isOverRange = tempRow < 1 || tempRow > 3 || tempColumn < 1 || tempColumn > 3;
+                                                    if (!isOverRange) {//either correct or is occupied
+                                                        isOccupied = chessBoard[tempRow - 1][tempColumn - 1].equals(superman)
+                                                                || chessBoard[tempRow - 1][tempColumn - 1].equals(batman);
+                                                        if (!isOccupied) {//correct
+                                                            rowCoordinate = tempRow;
+                                                            columnCoordinate = tempColumn;
+                                                        } else {//is occupied
+                                                            continue;
+                                                        }
+                                                    } else {//over range
+                                                        stopped = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }//else
+                            }// loop with !isNum && !stopped
+                        }
+                    }//loop with expression called isOverRange
+                } else {//either correct or is occupied
+                    isOccupied = chessBoard[rowCoordinate - 1][columnCoordinate - 1].equals(superman)
+                            || chessBoard[rowCoordinate - 1][columnCoordinate - 1].equals(batman);
+                    if (!isOccupied) {//must be correct
+
+                    } else {
+
+                    }
+                        while (isOccupied) {//it must be numbers and the coordinate is occupied
+                            boolean stopped = false;
+
+                            System.out.println("This cell is occupied! Choose another one!");
+                            scanner = new Scanner(System.in);
+                            isNum = scanner.hasNextInt();
+                            if (!isNum) {//if it is not number,go into it
+                                while (!isNum && !stopped) {
+                                    System.out.println("You should enter numbers!");
+                                    scanner = new Scanner(System.in);//reinput
+                                    isNum = scanner.hasNextInt();
+                                    if (!isNum) {
+                                        continue;
+                                    } else {
+                                        int tempRow = scanner.nextInt();
+                                        int tempColumn = scanner.nextInt();
+                                        isOverRange = tempRow < 1 || tempRow > 3 || tempColumn < 1 || tempColumn > 3;
+                                        if (isOverRange) {
+                                            while (isOverRange) {//if it is over range, go into the loop
+                                                System.out.println("coordinates should be from 1 to 3!");
+                                                scanner = new Scanner(System.in);
+                                                isNum = scanner.hasNextInt();
+                                                if (!isNum) {
+                                                    break;
+                                                } else {
+                                                    tempRow = scanner.nextInt();
+                                                    tempColumn = scanner.nextInt();
+                                                    isOverRange = tempRow < 1 || tempRow > 3 || tempColumn < 1 || tempColumn > 3;
+                                                    if (isOverRange) {
+                                                        continue;
+                                                    } else {
+                                                        isOccupied = chessBoard[tempRow - 1][tempColumn - 1].equals(superman)
+                                                                || chessBoard[tempRow - 1][tempColumn - 1].equals(batman);
+                                                        if (!isOccupied) {//if not occupied,assign row/column coordinate
+                                                            rowCoordinate = tempRow;
+                                                            columnCoordinate = tempColumn;
+                                                        } else {
+                                                            stopped = true;
+                                                            break;
+                                                        }
+
+                                                    }//else
+                                                }//else
+                                            }//loop with expression called isOverRange
+                                        }//if
+
+                                    }//else
+                                }//loop with expression like !isNum && !stopped
+                            }//if
+
+                        }//loop with expression like isOccupied
+
+                }//else
+                }
+
+
